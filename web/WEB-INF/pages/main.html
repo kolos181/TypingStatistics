@@ -28,11 +28,18 @@
                 return this.substr(0, index) + replacement + this.substr(index + replacement.length);
             }
 
+            var justStarted = true;
+            var startTime;
+
             $(document).on('keyup', '#word', function () {
 
+
+                if (justStarted === true) {
+                    startTime = new Date();
+                    justStarted = false;
+                }
+
                 var currentWord = wordsArray[counter];
-                console.log(typingText.length);
-                console.log(counter);
 
                 var typedLetters = $('#word').val();
                 //cutting current word to the length of word entered. Example:word from array is: "telephone",
@@ -43,10 +50,6 @@
                 //piece of correct word, which lenght equals to typed letters, no matter if they are right or wrong
                 var tempWord = currentWord.substring(0, typedLetters.length);
 
-//                if (tempWord == typedLetters && currentWord.length == tempWord) {
-//
-//                }
-
                 if (tempWord == typedLetters) {
                 //all text we went through up till this point
                 var textBefore = typingText.substring(0, nextLetterIndex);
@@ -54,7 +57,21 @@
                 var textAfter = typingText.substring(nextLetterIndex + 1, typingText.length - 1);
                 //letter we are working with at given moment
                 var currentLetter = typingText.substring(nextLetterIndex, nextLetterIndex + 1);
+                console.log("currentLetter[" + currentLetter.charCodeAt(0) + "]");
                 $('.workingText').replaceWith(replaceTags(textBefore, currentLetter, textAfter));
+                }
+
+                const $foo = $('.workingText').prop('outerHTML');
+//                console.log($foo);
+                //how the end of text should look when we entered all letters correctly.
+                //це дуже жестокій костиль, але я вже задовбався
+                var i = '<span class="underlined"></span><div></div></div>';
+                console.log($foo.slice(i.length * -1));
+
+                if ($foo.slice(i.length * -1) === i ) {
+                    var currentTime = new Date();
+                    var finishTime = currentTime - startTime;
+                    console.log(finishTime);
                 }
 
                 var typedLettersNoSpace = typedLetters.slice(0, -1);
@@ -62,6 +79,7 @@
 
                 if (currentWord == typedLetters && lastChar == " ") {
                     counter++;
+
                     //counting idex for highlighting next letter to input. +1 because we need to consider spaces
                     wITindex += typedLetters.length;
 
@@ -71,7 +89,19 @@
 
         });
 
+        function foo() {
+            var suckiFucki = $("#textArea").text();
+            var str = "<div class=\"workingText\">" + suckiFucki + "<span class=\"underlined\"></span><div></div></div>";
+            return str;
+        }
+
         function replaceTags(a, b, c) {
+            if(b.charCodeAt(0) === 10) {
+                var str = "<div class=\"workingText\">" + a + "<span class=\"underlined\"></span><div>";
+                return str;
+            }
+            console.log(b);
+            console.log(c);
             var str = "<div class=\"workingText\">" + a + "<span class=\"underlined\">" + b + "</span>" + c + "<div>";
             return str;
             console.log(str);
@@ -80,7 +110,7 @@
         function startRace() {
             $('#word').prop('disabled', false);
             document.getElementById("word").focus();
-        }   
+        }
 
     </script>
     <style>
@@ -123,7 +153,7 @@
 <body>
 <button id="startButton" class="margin" onclick="setTimeout(startRace, 1);">Start!</button>
 <p id="countdown"></p>
-<div id="textArea"><div class="workingText">Here is some text. Oh yeah! I can see now that there is a lot of things you can do to the text you are doing because when you are doing them you are doing something after all. By doind you badoink your existence and it is wonderfull in itself</div>
+<div id="textArea"><div class="workingText">Here</div>
 </div>
 <input id="word" type="text" disabled>
 </body>
