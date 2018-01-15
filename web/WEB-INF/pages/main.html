@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Klavogonki premium free</title>
+
+    <script type="text/javascript" src="../resources/JSLibs/jquery-2.1.1.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
+          type="text/css"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            var typingText = $('#textArea').text();
+            var wordsArray = typingText.split(" ");
+            for (var i = 0; i < wordsArray.length - 1; i++){
+                    wordsArray[i] += " ";
+            }
+
+            var counter = 0;
+            //index of the starting word. Either beginning, or up to last correct word wordInTextIndex.
+            //don't forget to add spaces manually
+            var wITindex = 0;
+
+            function replaceAt(index, replacement) {
+                return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+            }
+
+            $(document).on('keyup', '#word', function () {
+
+                var currentWord = wordsArray[counter];
+                console.log(typingText.length);
+                console.log(counter);
+
+                var typedLetters = $('#word').val();
+                //cutting current word to the length of word entered. Example:word from array is: "telephone",
+                //letters entered to #word for now are "teleph"
+
+                var nextLetterIndex = wITindex + typedLetters.length;
+
+                //piece of correct word, which lenght equals to typed letters, no matter if they are right or wrong
+                var tempWord = currentWord.substring(0, typedLetters.length);
+
+//                if (tempWord == typedLetters && currentWord.length == tempWord) {
+//
+//                }
+
+                if (tempWord == typedLetters) {
+                //all text we went through up till this point
+                var textBefore = typingText.substring(0, nextLetterIndex);
+                //text after
+                var textAfter = typingText.substring(nextLetterIndex + 1, typingText.length - 1);
+                //letter we are working with at given moment
+                var currentLetter = typingText.substring(nextLetterIndex, nextLetterIndex + 1);
+                $('.workingText').replaceWith(replaceTags(textBefore, currentLetter, textAfter));
+                }
+
+                var typedLettersNoSpace = typedLetters.slice(0, -1);
+                var lastChar = typedLetters.slice(-1);
+
+                if (currentWord == typedLetters && lastChar == " ") {
+                    counter++;
+                    //counting idex for highlighting next letter to input. +1 because we need to consider spaces
+                    wITindex += typedLetters.length;
+
+                    $('#word').val('');
+                }
+            });
+
+        });
+
+        function replaceTags(a, b, c) {
+            var str = "<div class=\"workingText\">" + a + "<span class=\"underlined\">" + b + "</span>" + c + "<div>";
+            console.log(str);
+            return str;
+        }
+
+        function startRace() {
+            $('#word').prop('disabled', false);
+            document.getElementById("word").focus();
+        }   
+
+    </script>
+    <style>
+
+        #typeText {
+            margin: 250px 250px 10px 250px;
+            font-size: 25px;
+        }
+
+        #word {
+            margin: 10px 0px 0px 250px;
+        }
+
+        .margin {
+            margin: 75px 0px 0px 250px;
+        }
+
+        .underlined {
+            color: blue;
+            text-decoration: underline;
+            text-decoration-color: blue;
+        }
+
+        .wrong {
+            background-color: darkred;
+        }
+
+        #textArea {
+            width: 450px;
+            height: 200px;
+            border: solid;
+            margin-left: 250px;
+            margin-top: 10px;
+            font-size: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+<button class="margin" onclick="setTimeout(startRace, 1);">Start!</button>
+<p id="countdown"></p>
+<div id="textArea"><div class="workingText">Here is some text. Oh yeah! I can see now that there is a lot of things you can do to the text you are doing because when you are doing them you are doing something after all. By doind you badoink your existence and it is wonderfull in itself</div>
+</div>
+<input id="word" type="text" disabled>
+</body>
+</html>
