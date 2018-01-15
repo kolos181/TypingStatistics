@@ -11,6 +11,8 @@
     <script>
         $(document).ready(function () {
 
+            document.getElementById("startButton").focus();
+
             var typingText = $('#textArea').text();
             var wordsArray = typingText.split(" ");
             for (var i = 0; i < wordsArray.length - 1; i++){
@@ -71,8 +73,8 @@
 
         function replaceTags(a, b, c) {
             var str = "<div class=\"workingText\">" + a + "<span class=\"underlined\">" + b + "</span>" + c + "<div>";
-            console.log(str);
             return str;
+            console.log(str);
         }
 
         function startRace() {
@@ -119,7 +121,7 @@
 </head>
 
 <body>
-<button class="margin" onclick="setTimeout(startRace, 1);">Start!</button>
+<button id="startButton" class="margin" onclick="setTimeout(startRace, 1);">Start!</button>
 <p id="countdown"></p>
 <div id="textArea"><div class="workingText">Here is some text. Oh yeah! I can see now that there is a lot of things you can do to the text you are doing because when you are doing them you are doing something after all. By doind you badoink your existence and it is wonderfull in itself</div>
 </div>
